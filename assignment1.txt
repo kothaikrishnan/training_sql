@@ -57,7 +57,7 @@ D05|finance|natasha stevens
 
 
 1)Select the Employee with the top three salaries
-sqlite> select salary from employee order by salary desc limit 3;
+select salary from employee order by salary desc limit 3;
 99475
 94791
 94324
