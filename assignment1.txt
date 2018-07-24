@@ -1,0 +1,133 @@
+create table employee(e_id varchar(10) primary key,name char(60),dept_id varchar(10),salary int,managerid varchar(10),foreign key(dept_id) references dept(dept_id));
+
+sqlite> insert into employee values('A114','martin tredeau','D01',54497,'A120');
+sqlite> insert into employee values('A116','robin wayne','D02',20196,'A187');
+sqlite> insert into employee values('A178','bruce wills','D03',66861,'A298');
+sqlite> insert into employee values('A132','paul vincent','D01',94791,'A120');
+sqlite> insert into employee values('A198','tom hanks','D02',16879,'A187');
+sqlite> insert into employee values('A120','tim archer','D01',48834,'A298');
+sqlite> insert into employee values('A143','brad michael','D01',24488,'A120');
+sqlite> insert into employee values('A187','adam justin','D02',80543,'A298');
+sqlite> insert into employee values('A121','stuart william','D02',78629,'A187');
+sqlite> insert into employee values('A142','tara cummings','D04',99475,'A187');
+sqlite> insert into employee values('A130','vanessa pary','D04',28565,'A187');
+sqlite> insert into employee values('A128','adam wayne','D05',94324,'A165');
+sqlite> insert into employee values('A129','joseph angelin','D05',44280,'A165');
+sqlite> insert into employee values('A165','natasha stevens','D05',31377,'A298');
+sqlite> insert into employee values('A111','john hellen','D01',15380,'A120');
+sqlite> insert into employee values('A194','harolld stevens','D02',32166,'A187');
+sqlite> insert into employee values('A133','steve michelos','D02',61215,'A187');
+sqlite> insert into employee values('A156','nick martin','D03',50174,'A178');
+
+select * from employee;
+A114|martin tredeau|D01|54497|A120
+A116|robin wayne|D02|20196|A187
+A178|bruce wills|D03|66861|A298
+A132|paul vincent|D01|94791|A120
+A198|tom hanks|D02|16879|A187
+A120|tim archer|D01|48834|A298
+A143|brad michael|D01|24488|A120
+A187|adam justin|D02|80543|A298
+A121|stuart william|D02|78629|A187
+A176|edward cane|D01|89176|A120
+A142|tara cummings|D04|99475|A187
+A130|vanessa pary|D04|28565|A187
+A128|adam wayne|D05|94324|A165
+A129|joseph angelin|D05|44280|A165
+A165|natasha stevens|D05|31377|A298
+A111|john hellen|D01|15380|A120
+A194|harolld stevens|D02|32166|A187
+A133|steve michelos|D02|61215|A187
+A156|nick martin|D03|50174|A178
+
+create table dept(dept_id varchar(10) primary key,depname char(60),depmanager char(50));
+
+sqlite> insert into dept values('D01','health','tim archer');
+sqlite> insert into dept values('D02','communications','adam justin');
+sqlite> insert into dept values('D03','product','bruce wills');
+sqlite> insert into dept values('D04','insurance','robert swift ');
+sqlite> insert into dept values('D05','finance','natasha stevens');
+
+sqlite> select * from dept;
+D01|health|tim archer
+D02|communications|adam justin
+D03|product|bruce wills
+D04|insurance|robert swift
+D05|finance|natasha stevens
+
+
+1)Select the Employee with the top three salaries
+sqlite> select salary from employee order by salary desc limit 3;
+99475
+94791
+94324
+
+2)Select the Employee with the least salary
+select e_id,name,min(salary) from employee;
+A111|john hellen|15380
+
+3)Select the Employee who does not have a manager in the department table
+select e.e_id,e.name,e.managerid from employee e inner join dept d on e.name=d.depmanager;
+A178|bruce wills|A298
+A120|tim archer|A298
+A187|adam justin|A298
+A165|natasha stevens|A298
+
+4)Select the Employee who is also a Manager
+select e.e_id,e.name,e.managerid from employee e inner join dept d on e.name=d.depmanager;
+A178|bruce wills|A298
+A120|tim archer|A298
+A187|adam justin|A298
+A165|natasha stevens|A298
+
+5)Select the Empolyee who is a Manager and has least salary
+
+select e_id,name,min(salary) from employee where salary in(select e.salary from employee e inner join dept d on e.name=d.depmanager);
+A165|natasha stevens|31377
+
+6)Select the total number of Employees in Communications departments
+
+select count(e.e_id) from employee e inner join dept d on e.dept_id=d.dept_id and d.depname='communications';
+6
+
+7)Select the Employee in Finance Department who has the top salary
+
+select e.e_id,e.name,e.dept_id,max(e.salary) from employee e inner join dept d on e.dept_id=d.dept_id and d.depname='finance';
+A128|adam wayne|D05|94324
+
+8)Select the Employee in product depatment who has the least salary
+
+select e.e_id,e.name,e.dept_id,min(e.salary) from employee e inner join dept d on e.dept_id=d.dept_id and d.depname='product';
+A156|nick martin|D03|50174
+
+9)Select the count of Empolyees in Health with maximum salary
+
+select count(salary) from employee where salary in (select max(e.salary) from employee e inner join dept d on e.dept_id=d.dept_id and d.depname='health');
+1
+
+10)Select the Employees who report to Natasha Stevens
+
+select e_id,name,managerid from employee where managerid=(select e.e_id from employee e inner join dept d on e.name=d.depmanager and d.depmanager='natasha stevens' );
+A128|adam wayne|A165
+A129|joseph angelin|A165
+
+11)Display the Employee name,Employee count,Dep name,Dept manager in the Health department
+
+select e.name,count(e.e_id),d.depname,d.depmanager from employee e inner join dept d on e.dept_id=d.dept_id and d.depname='health';
+john hellen|6|health|tim archer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
