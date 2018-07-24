@@ -111,12 +111,6 @@ select e_id,name,managerid from employee where managerid=(select e.e_id from emp
 A128|adam wayne|A165
 A129|joseph angelin|A165
 
-11)Display the Employee name,Employee count,Dep name,Dept manager in the Health department
-
-select e.name,count(e.e_id),d.depname,d.depmanager from employee e inner join dept d on e.dept_id=d.dept_id and d.depname='health';
-john hellen|6|health|tim archer
-
-
 
 
 
