@@ -67,11 +67,11 @@ select e_id,name,min(salary) from employee;
 A111|john hellen|15380
 
 3)Select the Employee who does not have a manager in the department table
-select e.e_id,e.name,e.managerid from employee e inner join dept d on e.name=d.depmanager;
-A178|bruce wills|A298
-A120|tim archer|A298
-A187|adam justin|A298
-A165|natasha stevens|A298
+select e_id,name from employee where managerid not in(select e.e_id from employee e inner join dept d on e.name=d.depmanager); 
+A178|bruce wills
+A120|tim archer
+A187|adam justin
+A165|natasha stevens
 
 4)Select the Employee who is also a Manager
 select e.e_id,e.name,e.managerid from employee e inner join dept d on e.name=d.depmanager;
